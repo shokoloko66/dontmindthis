@@ -73,12 +73,6 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
 
-    #student-info h4 {
-      margin-bottom: 20px;
-      font-weight: 700;
-      color: #2c3e50;
-    }
-
     #student-info p strong {
       color: #34495e;
     }
@@ -121,9 +115,23 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
+    .student-photo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #007bff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-right: 20px;
+    }
+
     @media (max-width: 768px) {
       .container-box {
         flex-direction: column;
+      }
+
+      .student-photo {
+        margin-bottom: 15px;
       }
     }
   </style>
@@ -155,7 +163,7 @@
         </div>
 
         <div class="mb-3 captcha-box">
-          <span id="captcha-question">Loading...</span>
+          <span id="captcha-question">9 + 1 =</span>
           <input type="text" class="form-control" id="captcha-answer" style="width: 60px;" placeholder="?" required>
         </div>
 
@@ -171,7 +179,14 @@
   </div>
 
   <div class="container" id="student-info" style="display:none;">
-    <h4 class="text-center">Student Library Card Report</h4>
+    <div class="d-flex align-items-center mb-4">
+      <img src="images/passport-new.jpg" alt="Student Photo" class="student-photo">
+      <div>
+        <h4 class="mb-1">Student Library Card Report</h4>
+        <small>Academic Year: 2025–2026</small>
+      </div>
+    </div>
+
     <p><strong>Student ID:</strong> 03-01-2425-043566<br>
        <strong>Name:</strong> AGUILLON, JHON PAUL GUTIERREZ<br>
        <strong>Course:</strong> Bachelor of Arts in Political Science<br>
@@ -212,12 +227,12 @@
   </div>
 
   <script>
-    let captchaResult = 0;
+    let correctAnswer;
 
     function generateCaptcha() {
       const num1 = Math.floor(Math.random() * 10) + 1;
       const num2 = Math.floor(Math.random() * 10) + 1;
-      captchaResult = num1 + num2;
+      correctAnswer = num1 + num2;
       document.getElementById('captcha-question').textContent = `${num1} + ${num2} =`;
     }
 
@@ -227,8 +242,8 @@
       const password = document.getElementById('password').value.trim();
       const captchaInput = parseInt(document.getElementById('captcha-answer').value.trim());
 
-      if (isNaN(captchaInput) || captchaInput !== captchaResult) {
-        alert('Incorrect captcha. Please try again.');
+      if (captchaInput !== correctAnswer) {
+        alert('Incorrect captcha answer.');
         generateCaptcha();
         return false;
       }
@@ -238,7 +253,6 @@
         document.getElementById('student-info').style.display = 'block';
       } else {
         alert('Invalid username or password.');
-        generateCaptcha();
       }
     }
 
