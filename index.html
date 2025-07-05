@@ -155,8 +155,8 @@
         </div>
 
         <div class="mb-3 captcha-box">
-          <span>9 + 1 =</span>
-          <input type="text" class="form-control" style="width: 60px;" placeholder="?" required>
+          <span id="captcha-question">Loading...</span>
+          <input type="text" class="form-control" id="captcha-answer" style="width: 60px;" placeholder="?" required>
         </div>
 
         <div class="mb-3">
@@ -212,18 +212,37 @@
   </div>
 
   <script>
+    let captchaResult = 0;
+
+    function generateCaptcha() {
+      const num1 = Math.floor(Math.random() * 10) + 1;
+      const num2 = Math.floor(Math.random() * 10) + 1;
+      captchaResult = num1 + num2;
+      document.getElementById('captcha-question').textContent = `${num1} + ${num2} =`;
+    }
+
     function handleLogin(event) {
       event.preventDefault();
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
+      const captchaInput = parseInt(document.getElementById('captcha-answer').value.trim());
+
+      if (isNaN(captchaInput) || captchaInput !== captchaResult) {
+        alert('Incorrect captcha. Please try again.');
+        generateCaptcha();
+        return false;
+      }
 
       if (username === '03-01-2425-043566' && password === '@Jhonpaul05') {
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('student-info').style.display = 'block';
       } else {
         alert('Invalid username or password.');
+        generateCaptcha();
       }
     }
+
+    window.onload = generateCaptcha;
   </script>
 </body>
 </html>
