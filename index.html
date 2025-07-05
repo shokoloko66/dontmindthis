@@ -108,5 +108,54 @@
       </form>
     </div>
   </div>
+
+  <div class="container" id="student-info" style="display:none;">
+    <div class="mt-5">
+      <h4>Student Ledger Report</h4>
+      <p><strong>Student ID:</strong> 03-01-2425-043566<br>
+         <strong>Name:</strong> AGUILLON, JHON PAUL GUTIERREZ<br>
+         <strong>Course:</strong> Bachelor of Arts in Political Science<br>
+         <strong>Status:</strong> Registered<br>
+         <strong>Campus:</strong> Dagupan Campus<br>
+         <strong>Year/Semester:</strong> Y2S1 / 2024-2025</p>
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Semester</th>
+            <th>Amount Due</th>
+            <th>Paid</th>
+            <th>Balance</th>
+            <th>Receipt #</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Y1S1 - SEM I</td><td>22034</td><td>7759</td><td>14275</td><td>1779445</td><td>19/08/2024</td></tr>
+          <tr><td>Y1S1 - SEM I</td><td>22034</td><td>7800</td><td>6475</td><td>1803264</td><td>26/09/2024</td></tr>
+          <tr><td>Y1S1 - SEM I</td><td>22034</td><td>6610</td><td>0</td><td>1826751</td><td>11/11/2024</td></tr>
+          <tr><td>Y1S2 - SEM II</td><td>18344</td><td>6400</td><td>11944</td><td>27198</td><td>24/01/2025</td></tr>
+          <tr><td>Y1S2 - SEM II</td><td>18344</td><td>6367</td><td>5577</td><td>52483</td><td>03/03/2025</td></tr>
+          <tr><td>Y1S2 - SEM II</td><td>18344</td><td>5577</td><td>0</td><td>74213</td><td>05/04/2025</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function handleLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Very basic authentication
+      if (username === 'student' && password === 'upang123') {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('student-info').style.display = 'block';
+      } else {
+        alert('Invalid username or password.');
+      }
+    }
+  </script>
 </body>
 </html>
+
