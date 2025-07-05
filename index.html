@@ -65,10 +65,24 @@
     .forgot-link {
       font-size: 0.9em;
     }
+
+    @media (max-width: 768px) {
+      .container-box {
+        flex-direction: column;
+      }
+
+      .left-section, .right-section {
+        padding: 20px;
+      }
+
+      .left-section img {
+        max-width: 100px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container-box">
+  <div class="container-box" id="login-box">
     <div class="left-section">
       <img src="images/logo_college.png" alt="University Logo">
       <h4>University of Pangasinan</h4>
@@ -82,7 +96,8 @@
         <h5 class="mt-3">Sign In</h5>
       </div>
 
-      <form class="form-box">
+      <!-- ✅ FIXED: onsubmit added -->
+      <form class="form-box" onsubmit="return handleLogin(event)">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" class="form-control" id="username" placeholder="Enter Username" required>
@@ -95,7 +110,7 @@
 
         <div class="mb-3 captcha-box">
           <span>9 + 1 =</span>
-          <input type="text" class="form-control" style="width: 60px;" placeholder="?">
+          <input type="text" class="form-control" style="width: 60px;" placeholder="?" required>
         </div>
 
         <div class="mb-3">
@@ -143,11 +158,10 @@
 
   <script>
     function handleLogin(event) {
-      event.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+      event.preventDefault(); // Stop form from refreshing the page
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-      // Very basic authentication
       if (username === 'student' && password === 'upang123') {
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('student-info').style.display = 'block';
@@ -158,4 +172,3 @@
   </script>
 </body>
 </html>
-
