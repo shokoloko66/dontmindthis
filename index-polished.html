@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Student library card portal demo for University of Pangasinan." />
+  <link rel="icon" type="image/png" href="images/logo_college.png" />
+  <title>UPang Library Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #697586;
+      --brand: #0f4c81;
+      --brand-dark: #0a355c;
+      --accent: #0f8b8d;
+      --warning: #f4b942;
+      --surface: #ffffff;
+      --line: #d9e2ec;
+      --soft: #f4f7fb;
+      --success: #177245;
+      --danger: #b42318;
+      --shadow: 0 18px 45px rgba(15, 76, 129, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, rgba(15, 76, 129, 0.08), rgba(15, 139, 141, 0.1)), var(--soft);
+      color: var(--ink);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .page-shell {
+      min-height: 100vh;
+      padding: clamp(18px, 4vw, 48px);
+    }
+
+    .login-panel {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.95fr) minmax(320px, 1.05fr);
+      max-width: 1040px;
+      min-height: 640px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid rgba(15, 76, 129, 0.12);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .identity-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(28px, 4vw, 48px);
+      color: #ffffff;
+      background: linear-gradient(rgba(10, 53, 92, 0.82), rgba(10, 53, 92, 0.9)), url("images/logo_college.png") center 72% / 270px no-repeat, var(--brand-dark);
+    }
+
+    .identity-panel::after {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 8px;
+      content: "";
+      background: linear-gradient(90deg, var(--warning), var(--accent));
+    }
+
+    .brand-lockup,
+    .privacy-mark,
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-lockup img {
+      width: 68px;
+      height: 68px;
+      object-fit: contain;
+      padding: 6px;
+      background: #ffffff;
+      border-radius: 8px;
+    }
+
+    .brand-lockup span,
+    .section-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-lockup span {
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.88rem;
+    }
+
+    .brand-lockup strong {
+      display: block;
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      line-height: 1.2;
+    }
+
+    .identity-copy h1 {
+      max-width: 410px;
+      margin: 72px 0 14px;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 750;
+      line-height: 1.05;
+    }
+
+    .identity-copy p,
+    .privacy-mark p {
+      max-width: 420px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+    }
+
+    .privacy-mark {
+      margin-top: 72px;
+    }
+
+    .privacy-mark img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      padding: 7px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+    }
+
+    .login-form-panel {
+      display: flex;
+      align-items: center;
+      padding: clamp(28px, 5vw, 56px);
+    }
+
+    .login-form {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    .form-logo {
+      height: 54px;
+      width: auto;
+      margin-bottom: 22px;
+    }
+
+    .section-label {
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+
+    .login-form h2,
+    .ledger-header h2 {
+      margin: 0 0 8px;
+      font-weight: 750;
+    }
+
+    .login-form h2 {
+      font-size: clamp(1.65rem, 3vw, 2.05rem);
+    }
+
+    .login-form .intro {
+      margin-bottom: 28px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .form-label {
+      color: #344054;
+      font-weight: 650;
+    }
+
+    .form-control,
+    .form-select {
+      min-height: 46px;
+      border-color: #cbd5e1;
+      border-radius: 6px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 0.22rem rgba(15, 139, 141, 0.15);
+    }
+
+    .password-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .btn {
+      min-height: 46px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--brand-dark);
+      border-color: var(--brand-dark);
+    }
+
+    .btn-outline-secondary {
+      color: var(--brand);
+      border-color: #cbd5e1;
+    }
+
+    .captcha-card {
+      display: grid;
+      grid-template-columns: 1fr 112px;
+      gap: 10px;
+      align-items: end;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .captcha-question {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0 14px;
+      background: #ffffff;
+      border: 1px dashed #9fb3c8;
+      border-radius: 6px;
+      color: var(--brand-dark);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .form-message {
+      min-height: 24px;
+      margin-top: 14px;
+      color: var(--danger);
+      font-size: 0.94rem;
+      font-weight: 650;
+    }
+
+    .forgot-link {
+      color: var(--brand);
+      font-size: 0.92rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .portal-shell {
+      display: none;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .portal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(15, 76, 129, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(23, 32, 42, 0.07);
+      backdrop-filter: blur(10px);
+    }
+
+    .portal-brand {
+      min-width: 0;
+    }
+
+    .portal-brand img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+    }
+
+    .portal-brand strong,
+    .profile-name strong {
+      display: block;
+      font-size: 1.02rem;
+    }
+
+    .portal-brand span,
+    .profile-name span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .portal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .profile-card,
+    .ledger-card {
+      background: var(--surface);
+      border: 1px solid rgba(15, 76, 129, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 12px 35px rgba(23, 32, 42, 0.08);
+    }
+
+    .profile-card {
+      overflow: hidden;
+    }
+
+    .profile-cover {
+      height: 92px;
+      background: linear-gradient(120deg, var(--brand), var(--accent));
+    }
+
+    .profile-body {
+      padding: 0 22px 22px;
+    }
+
+    .student-photo {
+      width: 118px;
+      height: 118px;
+      margin-top: -58px;
+      object-fit: cover;
+      background: #ffffff;
+      border: 4px solid #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 12px 24px rgba(23, 32, 42, 0.18);
+    }
+
+    .profile-name {
+      margin-top: 14px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 7px 10px;
+      background: rgba(23, 114, 69, 0.1);
+      border: 1px solid rgba(23, 114, 69, 0.18);
+      border-radius: 999px;
+      color: var(--success);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 13px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .detail-list span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .detail-list strong {
+      display: block;
+      margin-top: 2px;
+      color: #273444;
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .ledger-card {
+      padding: clamp(18px, 3vw, 26px);
+    }
+
+    .ledger-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .ledger-header h2 {
+      font-size: clamp(1.28rem, 3vw, 1.7rem);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 250px) minmax(160px, 220px);
+      gap: 10px;
+      min-width: min(100%, 480px);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      gap: 10px;
+      margin: 16px 0 18px;
+    }
+
+    .summary-item {
+      min-height: 92px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--brand);
+      border-radius: 8px;
+    }
+
+    .summary-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.18rem;
+      color: var(--ink);
+    }
+
+    .summary-item.paid {
+      border-left-color: var(--success);
+    }
+
+    .summary-item.balance {
+      border-left-color: var(--danger);
+    }
+
+    .summary-item.excess {
+      border-left-color: var(--warning);
+    }
+
+    .table {
+      min-width: 760px;
+      margin-bottom: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .table thead th {
+      background: var(--brand-dark);
+      color: #ffffff;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .table td,
+    .table th {
+      padding: 0.9rem;
+      vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .amount-paid {
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .amount-balance {
+      color: var(--danger);
+      font-weight: 800;
+    }
+
+    .empty-state {
+      padding: 26px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 960px) {
+      .login-panel,
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .login-panel {
+        min-height: auto;
+      }
+
+      .identity-copy h1,
+      .privacy-mark {
+        margin-top: 42px;
+      }
+
+      .ledger-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .controls,
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        padding: 12px;
+      }
+
+      .identity-panel,
+      .login-form-panel,
+      .ledger-card {
+        padding: 22px;
+      }
+
+      .brand-lockup,
+      .privacy-mark,
+      .portal-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .password-row,
+      .captcha-card,
+      .controls,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .portal-actions .btn {
+        flex: 1;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page-shell {
+        padding: 0;
+      }
+
+      .portal-topbar,
+      .controls,
+      .btn {
+        display: none !important;
+      }
+
+      .portal-shell {
+        display: block !important;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-card,
+      .ledger-card {
+        border: 1px solid #999999;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="login-panel" id="login-panel" aria-label="Student sign in">
+      <aside class="identity-panel">
+        <div>
+          <div class="brand-lockup">
+            <img src="images/logo_college.png" alt="University of Pangasinan logo" />
+            <div>
+              <span>University of Pangasinan</span>
+              <strong>Library Services Portal</strong>
+            </div>
+          </div>
+
+          <div class="identity-copy">
+            <h1>Student Library Card</h1>
+            <p>View your registered library card record, subject book fees, receipts, and semester balances in one secure-looking portal.</p>
+          </div>
+        </div>
+
+        <div class="privacy-mark">
+          <img src="images/dpo.logo.png" alt="Data privacy seal" />
+          <p>28WV+R2R, Arellano Street, Downtown District, Dagupan, Pangasinan</p>
+        </div>
+      </aside>
+
+      <div class="login-form-panel">
+        <form class="login-form" id="login-form">
+          <img class="form-logo" src="images/logo-phin.png" alt="PHINMA logo" />
+          <p class="section-label">Student Access</p>
+          <h2>Sign in to continue</h2>
+          <p class="intro">Enter your student credentials and complete the quick verification check.</p>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Student ID</label>
+            <input type="text" class="form-control" id="username" autocomplete="username" placeholder="Enter student ID" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="password-row">
+              <input type="password" class="form-control" id="password" autocomplete="current-password" placeholder="Enter password" required />
+              <button class="btn btn-outline-secondary" type="button" id="toggle-password">Show</button>
+            </div>
+          </div>
+
+          <div class="mb-3 captcha-card">
+            <div>
+              <label class="form-label" for="captcha-answer">Verification</label>
+              <div class="captcha-question" id="captcha-question">Loading...</div>
+            </div>
+            <div>
+              <label class="form-label" for="captcha-answer">Answer</label>
+              <input type="number" class="form-control" id="captcha-answer" inputmode="numeric" required />
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-100" type="submit">Login</button>
+          <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
+
+          <div class="text-center mt-2">
+            <a class="forgot-link" href="#">Forgot password?</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="portal-shell" id="portal-shell" aria-label="Student library card report">
+      <header class="portal-topbar">
+        <div class="portal-brand">
+          <img src="images/logo_college.png" alt="University of Pangasinan logo" />
+          <div>
+            <strong>Library Card Report</strong>
+            <span>University of Pangasinan - Dagupan Campus</span>
+          </div>
+        </div>
+        <div class="portal-actions">
+          <button class="btn btn-outline-secondary" type="button" id="print-report">Print</button>
+          <button class="btn btn-primary" type="button" id="logout-button">Logout</button>
+        </div>
+      </header>
+
+      <div class="dashboard-grid">
+        <aside class="profile-card">
+          <div class="profile-cover"></div>
+          <div class="profile-body">
+            <img src="images/passport-new.jpg" alt="Student photo" class="student-photo" />
+            <div class="profile-name">
+              <strong>AGUILLON, JHON PAUL GUTIERREZ</strong>
+              <span>Bachelor of Arts in Political Science</span>
+            </div>
+            <span class="status-badge">Registered</span>
+
+            <ul class="detail-list">
+              <li>
+                <span>Student ID</span>
+                <strong>03-01-2425-043566</strong>
+              </li>
+              <li>
+                <span>Campus</span>
+                <strong>Dagupan Campus</strong>
+              </li>
+              <li>
+                <span>Record Type</span>
+                <strong>Student Library Card</strong>
+              </li>
+              <li>
+                <span>Last Updated</span>
+                <strong id="last-updated">--</strong>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="ledger-card">
+          <div class="ledger-header">
+            <div>
+              <p class="section-label">Ledger</p>
+              <h2>Book Fee Summary</h2>
+            </div>
+            <div class="controls">
+              <select id="semester-select" class="form-select" aria-label="Select semester"></select>
+              <input id="subject-filter" class="form-control" type="search" placeholder="Search subject" aria-label="Search subject" />
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span>Total Demand</span>
+              <strong id="total-demand">PHP 0.00</strong>
+            </div>
+            <div class="summary-item paid">
+              <span>Total Paid</span>
+              <strong id="total-paid">PHP 0.00</strong>
+            </div>
+            <div class="summary-item balance">
+              <span>Total Balance</span>
+              <strong id="total-balance">PHP 0.00</strong>
+            </div>
+            <div class="summary-item excess">
+              <span>Total Excess</span>
+              <strong id="total-excess">PHP 0.00</strong>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Books / Subject Code</th>
+                  <th scope="col">Amount Due</th>
+                  <th scope="col">Paid</th>
+                  <th scope="col">Balance</th>
+                  <th scope="col">Receipt No.</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const DEMO_USERNAME = "03-01-2425-043566";
+    const DEMO_PASSWORD = "library2026";
+
+    const semesterData = {
+      Y2P1: {
+        label: "Y2P1 - SY 25-26 PER I",
+        rows: [
+          { subject: "FIL 124", due: 0, paid: 200, balance: 0, receipt: "4821", date: "7/11/2025" },
+          { subject: "FIL 127", due: 0, paid: 200, balance: 0, receipt: "5821", date: "7/11/2025" },
+          { subject: "GEN 006", due: 0, paid: 150, balance: 0, receipt: "18504", date: "7/11/2025" },
+          { subject: "PATHFIT 032", due: 0, paid: 100, balance: 0, receipt: "17642", date: "7/17/2025" },
+          { subject: "POS 063", due: 0, paid: 350, balance: 0, receipt: "2561", date: "7/16/2025" },
+          { subject: "POS 064", due: 0, paid: 350, balance: 0, receipt: "19742", date: "7/17/2025" },
+          { subject: "SSP 005", due: 0, paid: 100, balance: 0, receipt: "4319", date: "7/11/2025" }
+        ]
+      },
+      Y2P2: {
+        label: "Y2P2 - SY 25-26 PER II",
+        rows: [
+          { subject: "FIL 124", due: 0, paid: 200, balance: 0, receipt: "8274", date: "8/21/2025" },
+          { subject: "FIL 127", due: 0, paid: 200, balance: 0, receipt: "13952", date: "8/21/2025" },
+          { subject: "GEN 006", due: 0, paid: 150, balance: 0, receipt: "6048", date: "8/21/2025" },
+          { subject: "PATHFIT 032", due: 0, paid: 100, balance: 0, receipt: "97215", date: "8/19/2025" },
+          { subject: "POS 063", due: 0, paid: 350, balance: 0, receipt: "3186", date: "8/22/2025" },
+          { subject: "POS 064", due: 0, paid: 350, balance: 0, receipt: "75029", date: "8/20/2025" },
+          { subject: "SSP 005", due: 0, paid: 100, balance: 0, receipt: "2469", date: "8/22/2025" }
+        ]
+      },
+      Y2P3: {
+        label: "Y2P3 - SY 25-26 PER III",
+        rows: [
+          { subject: "FIL 124", due: 0, paid: 200, balance: 0, receipt: "7291", date: "10/3/2025" },
+          { subject: "FIL 127", due: 0, paid: 200, balance: 0, receipt: "83015", date: "9/26/2025" },
+          { subject: "GEN 006", due: 0, paid: 150, balance: 0, receipt: "19542", date: "9/26/2025" },
+          { subject: "PATHFIT 032", due: 100, paid: 100, balance: 0, receipt: "1839", date: "10/3/2025" },
+          { subject: "POS 063", due: 0, paid: 350, balance: 0, receipt: "35407", date: "9/24/2025" },
+          { subject: "POS 064", due: 0, paid: 350, balance: 0, receipt: "2658", date: "10/2/2025" },
+          { subject: "SSP 005", due: 0, paid: 100, balance: 0, receipt: "29104", date: "10/4/2025" }
+        ]
+      }
+    };
+
+    let correctCaptcha = 0;
+
+    const loginPanel = document.getElementById("login-panel");
+    const portalShell = document.getElementById("portal-shell");
+    const loginForm = document.getElementById("login-form");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const togglePasswordButton = document.getElementById("toggle-password");
+    const captchaQuestion = document.getElementById("captcha-question");
+    const captchaAnswer = document.getElementById("captcha-answer");
+    const formMessage = document.getElementById("form-message");
+    const semesterSelect = document.getElementById("semester-select");
+    const subjectFilter = document.getElementById("subject-filter");
+    const ledgerBody = document.getElementById("ledger-body");
+
+    function money(value) {
+      return `PHP ${Number(value).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}`;
+    }
+
+    function generateCaptcha() {
+      const left = Math.floor(Math.random() * 40) + 10;
+      const right = Math.floor(Math.random() * 9) + 1;
+      const operator = Math.random() > 0.5 ? "+" : "-";
+      correctCaptcha = operator === "+" ? left + right : left - right;
+      captchaQuestion.textContent = `${left} ${operator} ${right} =`;
+      captchaAnswer.value = "";
+    }
+
+    function showMessage(message) {
+      formMessage.textContent = message;
+    }
+
+    function populateSemesterOptions() {
+      semesterSelect.innerHTML = Object.entries(semesterData).map(([value, item]) => (
+        `<option value="${value}">${item.label}</option>`
+      )).join("");
+    }
+
+    function getVisibleRows() {
+      const selectedSemester = semesterSelect.value;
+      const query = subjectFilter.value.trim().toLowerCase();
+      return semesterData[selectedSemester].rows.filter((row) => row.subject.toLowerCase().includes(query));
+    }
+
+    function renderLedger() {
+      const rows = getVisibleRows();
+      const totals = rows.reduce((sum, row) => ({
+        due: sum.due + row.due,
+        paid: sum.paid + row.paid,
+        balance: sum.balance + row.balance
+      }), { due: 0, paid: 0, balance: 0 });
+
+      document.getElementById("total-demand").textContent = money(totals.due);
+      document.getElementById("total-paid").textContent = money(totals.paid);
+      document.getElementById("total-balance").textContent = money(totals.balance);
+      document.getElementById("total-excess").textContent = money(Math.max(0, totals.paid - totals.due));
+
+      if (rows.length === 0) {
+        ledgerBody.innerHTML = `<tr><td class="empty-state" colspan="6">No matching subject records found.</td></tr>`;
+        return;
+      }
+
+      ledgerBody.innerHTML = rows.map((row) => `
+        <tr>
+          <td><strong>${row.subject}</strong></td>
+          <td>${money(row.due)}</td>
+          <td class="amount-paid">${money(row.paid)}</td>
+          <td class="${row.balance > 0 ? "amount-balance" : ""}">${money(row.balance)}</td>
+          <td>${row.receipt}</td>
+          <td>${row.date}</td>
+        </tr>
+      `).join("");
+    }
+
+    function openPortal() {
+      loginPanel.style.display = "none";
+      portalShell.style.display = "block";
+      document.getElementById("last-updated").textContent = new Date().toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+      renderLedger();
+    }
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+      const answer = Number(captchaAnswer.value);
+
+      if (answer !== correctCaptcha) {
+        showMessage("Verification answer is incorrect. Please try again.");
+        generateCaptcha();
+        return;
+      }
+
+      if (username !== DEMO_USERNAME || password !== DEMO_PASSWORD) {
+        showMessage("Student ID or password did not match the demo record.");
+        generateCaptcha();
+        return;
+      }
+
+      showMessage("");
+      openPortal();
+    });
+
+    togglePasswordButton.addEventListener("click", () => {
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      togglePasswordButton.textContent = isHidden ? "Hide" : "Show";
+    });
+
+    semesterSelect.addEventListener("change", renderLedger);
+    subjectFilter.addEventListener("input", renderLedger);
+
+    document.getElementById("print-report").addEventListener("click", () => window.print());
+    document.getElementById("logout-button").addEventListener("click", () => {
+      portalShell.style.display = "none";
+      loginPanel.style.display = "grid";
+      loginForm.reset();
+      subjectFilter.value = "";
+      showMessage("");
+      generateCaptcha();
+      usernameInput.focus();
+    });
+
+    populateSemesterOptions();
+    generateCaptcha();
+    renderLedger();
+  </script>
+</body>
+</html>
